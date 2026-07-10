@@ -1,8 +1,9 @@
 # cloud-itonami-iso3166-civ
 
-**CIV**: Republic of Côte d'Ivoire.
+**`:implemented`** for **CIV**. Flagship `ci-entity-missing`, tax `rccm-unverified`.
 
-- ANRMP / e-procurement
-- RCCM + DGI tax ID
+```
+clojure -M:dev:test
+```
 
 AGPL-3.0-or-later.
