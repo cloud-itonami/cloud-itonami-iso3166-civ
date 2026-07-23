@@ -1,0 +1,35 @@
+(ns statute.facts-test
+  (:require [clojure.string :as str]
+            [clojure.test :refer [deftest is]]
+            [statute.facts :as facts]))
+
+(deftest civ-has-spec-basis
+  (let [sb (facts/spec-basis "CIV")]
+    (is (= 4 (count sb)))
+    (is (= (count sb) (count (set (map :statute/id sb)))))
+    (is (every? #(str/starts-with? (:statute/url %) "https://") sb))
+    (is (every? :statute/law-number sb))
+    (is (every? #(= "CIV" (:statute/jurisdiction %)) sb))
+    (is (every? #(seq (:statute/topic %)) sb))))
+
+(deftest unknown-jurisdiction-has-no-spec-basis
+  (is (nil? (facts/spec-basis "ATL")))
+  (is (nil? (facts/spec-basis "ZZZ"))))
+
+(deftest coverage-is-honest
+  (let [c (facts/coverage ["CIV" "GHA" "ATL"])]
+    (is (= 3 (:requested c)))
+    (is (= 1 (:covered c)))
+    (is (= ["ATL" "GHA"] (:missing-jurisdictions c)))))
+
+(deftest by-topic-filters
+  (is (= ["civ.ohada-auscgie"]
+         (mapv :statute/id (facts/by-topic "CIV" :corporate-governance))))
+  (is (= ["civ.code-du-travail-2015"]
+         (mapv :statute/id (facts/by-topic "CIV" :labor))))
+  (is (= ["civ.loi-2013-450-donnees-personnelles"]
+         (mapv :statute/id (facts/by-topic "CIV" :data-protection))))
+  (is (= ["civ.ordonnance-2018-investissements"]
+         (mapv :statute/id (facts/by-topic "CIV" :investment))))
+  (is (empty? (facts/by-topic "CIV" :environment)))
+  (is (empty? (facts/by-topic "ATL" :labor))))

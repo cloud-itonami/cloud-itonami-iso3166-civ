@@ -1,0 +1,243 @@
+(ns statute.facts
+  "General-law compliance catalog for Côte d'Ivoire (CIV) -- extends this
+  repo's existing `marketentry.facts` (public-procurement market-entry
+  only, narrow scope -- ANRMP e-procurement / Code des marchés publics /
+  RCCM-CEPICI-DGI) with a second, orthogonal catalog of statutes a
+  company operating in this jurisdiction must generally track for
+  compliance. Mirrors cloud-itonami-iso3166-tgo/-cmr/-ben's
+  `statute.facts` (ADR-2607141700, cloud-itonami-compliance-fact-
+  federation) -- this iteration read all three siblings' full
+  `src/statute/facts.cljc` before writing this one.
+
+  Every entry below cites an OFFICIAL government-hosted (Assemblée
+  Nationale de Côte d'Ivoire, ARTCI), official-supranational-body-hosted
+  (OHADA), or official-international-organization-hosted (UNCTAD
+  Investment Policy Hub, the same hosting discipline this family's
+  Togo/Cameroon iterations relied on for their own investment codes)
+  URL -- never fabricated, all curl/WebFetch/pdftotext-verified
+  2026-07-23. Where a primary site returned a bot-detection-adjacent
+  block, the Internet Archive Wayback Machine was used as the
+  documented fallback -- never a browser-automation bypass; see below
+  for each such case.
+
+  **Cross-check against this repo's own `marketentry.facts`** (read in
+  full before writing this file, per this task's own instruction):
+  `marketentry.facts` cites ANRMP / 'Code des marchés publics'
+  (anrmp.ci) for procurement and CEPICI / DGI (cepici.gouv.ci) for the
+  corporate number / RCCM. This iteration independently re-tested BOTH
+  of those exact provenance URLs this session and found:
+  - `https://www.anrmp.ci/` now 301-redirects to `https://arcop.ci/` --
+    ARCOP (Autorité de Régulation de la Commande Publique), which
+    WebFetch-confirmed as ANRMP's OWN successor/rename (the site's
+    footer/legend shows 'ARCOP (Ex ANRMP)' and republishes prior ANRMP
+    activity reports under the new name). The URL still resolves (no
+    dead domain, unlike a Cameroon-family sibling's `armp.cm` finding),
+    but the institution's name has changed since `marketentry.facts`
+    was written -- an honest, disclosed observation for a future
+    maintainer of THAT file, NOT fixed here (out of this orthogonal
+    statute-catalog task's own scope, the same restraint the Cameroon
+    iteration applied to its own analogous finding).
+  - `https://www.cepici.gouv.ci/` 301-redirects to `https://cepici.ci/`,
+    which is live but sits behind a Sucuri/Cloudproxy JS bot-detection
+    challenge (a cookie-setting interstitial) -- this iteration did NOT
+    attempt to solve or script past that challenge (hard rule), so
+    CEPICI's own current page text could not be independently read this
+    session either way. Also noted, not fixed, for the same reason.
+  Neither observation changes `marketentry.facts` itself; this catalog
+  stays confined to its own orthogonal topic (general company / labor /
+  investment / data-protection law), not procurement.
+
+  - **Companies/commercial-entity law**: this iteration specifically
+    investigated, rather than assumed by analogy to the TGO/CMR/BEN
+    siblings, whether Côte d'Ivoire is itself an OHADA member state --
+    independently confirmed directly on OHADA's own 'Les Etats membres
+    de l'OHADA' page (`ohada.org/les-etats-membres-de-lohada/`,
+    WebFetch-verified this session), which lists 'Cote d'Ivoire' among
+    the 17 member states (fitting, since Côte d'Ivoire is also where
+    OHADA itself is headquartered, Abidjan). So, like its siblings,
+    company law is governed DIRECTLY by a SUPRANATIONAL instrument, the
+    OHADA Acte uniforme relatif au droit des sociétés commerciales et du
+    groupement d'intérêt économique (AUSCGIE) -- this iteration
+    independently fetched OHADA's own page
+    (`ohada.org/en/commercial-companies-and-economic-interest-groups/`,
+    WebFetch-verified directly this session) and confirmed, in OHADA's
+    own words: adoption '30 January 2014 in Ouagadougou (Burkina
+    Faso)', publication '4 February 2014' in the OHADA Official
+    Gazette, entry into force '5 May 2014'. Separately, RCCM/business-
+    entity REGISTRATION -- as opposed to company FORMATION/governance
+    law -- is governed by a DIFFERENT OHADA instrument, the Acte
+    Uniforme relatif au Droit Commercial Général (AUDCG; own page
+    independently fetched this session, `ohada.org/droit-commercial-
+    general/`: adopted '15 décembre 2010 à Lomé (Togo)', published '15
+    février 2011', in force '15 mai 2011'); this catalog does not
+    conflate the two, and deliberately does NOT add a second catalog
+    entry for AUDCG here (the same discipline the CMR/TGO siblings
+    applied) -- RCCM is `marketentry.facts`'s own topic, even though
+    that file does not currently name AUDCG explicitly (the same gap
+    the Cameroon iteration disclosed for its own `marketentry.facts`).
+  - **Code du Travail (Labour Code)**: Loi n°2015-532 du 20 juillet 2015
+    portant Code du Travail -- this iteration located the exact
+    citation NOT on a secondary commentary site but in the Assemblée
+    Nationale de Côte d'Ivoire's OWN official register of laws voted
+    2012-2016 (`assnat.ci`, a government-hosted primary source),
+    own text read directly via `pdftotext -layout` (native text layer,
+    no OCR needed): entry #159, 'Loi portant Code du travail', adopted
+    'Lundi 13 Juillet 2015', promulgated 'Loi N°2015-532 du 20 juillet
+    2015'. Direct HTTPS fetch of `assnat.ci` returned a plain HTTP 403
+    (no JS challenge script observed, unlike the Sucuri case above) --
+    the PDF was instead fetched via the Internet Archive Wayback
+    Machine (a 2017 snapshot, well before this catalog's own
+    2026-07-23 retrieval), the documented fallback, not a bypass. This
+    iteration did NOT independently fetch the Code du Travail's own
+    full article text this session (only the Assembly's own voting-
+    register entry that names the exact law number/date/title) -- an
+    honest, disclosed narrower scope than the CMR sibling's own Code du
+    Travail entry (which did read the code's own Article 1er directly);
+    a future iteration extending this entry to cite the code's own
+    substantive text should fetch it directly.
+  - **Protection des données à caractère personnel (Data Protection)**:
+    Loi n°2013-450 du 19 juin 2013 relative à la protection des données
+    à caractère personnel -- this iteration independently fetched the
+    OWN primary English-translation text of this law, a native
+    text-layer PDF (no OCR needed, `pdftotext -layout` succeeded
+    directly), HOSTED ON ARTCI's OWN official site (`artci.ci` --
+    Autorité de Régulation des Télécommunications/TIC de Côte d'Ivoire,
+    the law's own 'Protection Authority'). Direct HTTPS fetch of
+    `artci.ci` returned a Sucuri/Cloudproxy JS bot-detection challenge
+    (the SAME cookie-setting interstitial CEPICI's own site returns,
+    both apparently hosted behind the same Sucuri Cloudproxy
+    infrastructure) -- per this loop's own hard rule, that challenge
+    was NOT solved or scripted past; the PDF was instead fetched via the
+    Internet Archive Wayback Machine (a 2021 snapshot), the documented
+    fallback. Own text read directly, HIGH confidence: 'LAW No. 2013-450
+    dated June 19, 2013 on the protection of personal data. THE NATIONAL
+    ASSEMBLY has adopted, the President of the Republic promulgates the
+    law which content as follows'. This iteration ALSO independently
+    corroborated the exact date via a SECOND, adjacent primary document
+    on the same host+path pattern -- 'Loi n°2013-451 du 19 juin 2013
+    relative à la lutte contre la cybercriminalite' (a companion law in
+    the same digital-economy legislative package, own PDF metadata
+    Title read directly via `pdfinfo`, also fetched via the Wayback
+    Machine after droit-afrique.com's own hosting of that file returned
+    HTTP 403 on a direct attempt) -- confirming the SAME date '19 juin
+    2013' independently, for a sibling law with a sequential number.
+    This iteration ALSO independently corroborated the law number/date
+    against DLA Piper's 'Data Protection Laws of the World' handbook
+    entry for Côte d'Ivoire (a professional secondary source,
+    WebFetch-verified directly, cited only as corroboration, not as the
+    catalog's own `:statute/url`), which states the SAME 'Law no.
+    2013-450 of 19 June 2013' and separately names ARTCI as the
+    enforcing authority and 'Decree No. 2015-79 (4 February 2015)' as a
+    related implementing decree on declaration/authorization procedures
+    -- that implementing decree was NOT independently fetched this
+    session and is not asserted as a separate catalog entry here (an
+    honest, disclosed narrower scope; a future iteration could add it).
+  - **Investment Code**: Ordonnance n°2018-646 du 1er août 2018 portant
+    Code des Investissements -- this iteration independently fetched
+    the primary text via UNCTAD's Investment Policy Hub
+    (`investmentpolicy.unctad.org`, an international-organization-
+    hosted source, WebFetch-verified directly, the SAME hosting
+    discipline this family's Togo/Cameroon iterations used for their
+    own investment codes), confirmed in BOTH the French and English
+    listing entries UNCTAD hosts for this same ordinance: 'Ordonnance
+    N° 2018-646 du 1er Aout 2018 Portant Code des Investissements' /
+    'ORDINANCE NO. 2018-646 OF 1 AUGUST 2018 ON THE INVESTMENT CODE'.
+    This iteration did NOT independently fetch CEPICI's own domestic
+    hosting of this ordinance this session (CEPICI's site was
+    unreachable behind the Sucuri challenge noted above) -- the
+    UNCTAD-hosted copy is the citation basis here, an honest, disclosed
+    single-source basis (unlike the Cameroon iteration's own
+    two-independent-copy corroboration for its own investment law).
+  - **Tax administration**: this iteration specifically looked for a
+    Direction Générale des Impôts (DGI) institutional-organization
+    decree, the same shape the TGO/CMR siblings each added for their
+    own tax administrations. `dgi.gouv.ci` IS directly reachable (plain
+    HTTP 200, no bot-detection challenge encountered), but its own
+    front page carries no citable decree/law text (a client-rendered
+    landing page with no server-rendered legal citation) -- this
+    iteration did NOT fabricate a decree number from memory or
+    analogy, and does NOT add a tax-administration catalog entry this
+    iteration; an honest, disclosed coverage gap, not an assertion no
+    such founding decree exists.
+
+  A law not in this table has NO spec-basis, full stop; extend
+  `catalog`, do not invent an id/url.")
+
+(def catalog
+  "iso3 -> vector of statute entries. `:statute/url` + `:statute/law-number`
+  are the citation the governor requires before any compliance-fact
+  proposal referencing this law can commit."
+  {"CIV"
+   [{:statute/id "civ.ohada-auscgie"
+     :statute/title "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE)"
+     :statute/jurisdiction "CIV"
+     :statute/kind :law
+     :statute/law-number "OHADA Uniform Act -- adopted 30 January 2014 (Ouagadougou), published in the OHADA Official Gazette 4 February 2014, in force 5 May 2014; directly applicable in Côte d'Ivoire as an OHADA member state (Côte d'Ivoire membership independently re-verified this session from ohada.org's own member-state list, listed as 'Cote d'Ivoire'), no domestic transposition act required"
+     :statute/url "https://www.ohada.org/en/commercial-companies-and-economic-interest-groups/"
+     :statute/url-provenance :official-ohada-org
+     :statute/enacted-date "2014-01-30"
+     :statute/retrieved-at "2026-07-23"
+     :statute/topic #{:corporate-governance :incorporation}}
+    {:statute/id "civ.code-du-travail-2015"
+     :statute/title "Code du Travail (Côte d'Ivoire)"
+     :statute/jurisdiction "CIV"
+     :statute/kind :law
+     :statute/law-number "Loi n°2015-532 du 20 juillet 2015 (own citation read directly, native text, in the Assemblée Nationale de Côte d'Ivoire's own official register of laws voted 2012-2016 -- entry #159, adopted 13 juillet 2015; assnat.ci's own site returned HTTP 403 on a direct fetch, so this PDF was fetched via the Internet Archive Wayback Machine, the documented fallback, not a bypass. Supersedes the 1995 Code du Travail this iteration also found archived on droit-afrique.com)"
+     :statute/url "https://web.archive.org/web/20171215202625/http://www.assnat.ci:80/assembleenationale/IMG/pdf/lois_votees_de_2012_a_2016.pdf"
+     :statute/url-provenance :official-assnat-ci-via-wayback
+     :statute/enacted-date "2015-07-20"
+     :statute/retrieved-at "2026-07-23"
+     :statute/topic #{:labor :employment}}
+    {:statute/id "civ.loi-2013-450-donnees-personnelles"
+     :statute/title "Loi relative à la protection des données à caractère personnel"
+     :statute/jurisdiction "CIV"
+     :statute/kind :law
+     :statute/law-number "Loi n°2013-450 du 19 juin 2013 (own primary English-translation text, native text-layer PDF, read directly via pdftotext; HIGH confidence, no OCR required; hosted on ARTCI's own official site, fetched via the Internet Archive Wayback Machine after artci.ci returned a Sucuri/Cloudproxy JS bot-detection challenge on a direct attempt this session -- the documented fallback, not a bypass. Independently date-corroborated via the companion Loi n°2013-451 du 19 juin 2013 on cybercrime, and via DLA Piper's Data Protection Laws of the World handbook entry for Côte d'Ivoire)"
+     :statute/url "https://web.archive.org/web/20211208145601/https://www.artci.ci/images/stories/pdf-english/lois_english/loi_2013_450_english.pdf"
+     :statute/url-provenance :official-artci-ci-via-wayback
+     :statute/enacted-date "2013-06-19"
+     :statute/retrieved-at "2026-07-23"
+     :statute/topic #{:data-protection :privacy}}
+    {:statute/id "civ.ordonnance-2018-investissements"
+     :statute/title "Ordonnance portant Code des Investissements (Côte d'Ivoire)"
+     :statute/jurisdiction "CIV"
+     :statute/kind :law
+     :statute/law-number "Ordonnance n° 2018-646 du 1er août 2018 (own primary text independently fetched from UNCTAD's Investment Policy Hub, international-organization-hosted, clean/no-OCR; confirmed in both a French and an English listing entry hosted by UNCTAD for the same ordinance)"
+     :statute/url "https://investmentpolicy.unctad.org/investment-laws/laws/284/c-te-d-ivoire-code-des-investissements-c-te-d-ivoire"
+     :statute/url-provenance :official-unctad-investment-policy-hub
+     :statute/enacted-date "2018-08-01"
+     :statute/retrieved-at "2026-07-23"
+     :statute/topic #{:investment}}]})
+
+(defn spec-basis
+  "The jurisdiction's statute vector, or nil -- nil means NO spec-basis
+  for that jurisdiction yet."
+  [iso3]
+  (get catalog iso3))
+
+(defn coverage
+  "Honest coverage report, same shape/discipline as `marketentry.facts/coverage`:
+  never report a missing jurisdiction as covered."
+  ([] (coverage (keys catalog)))
+  ([iso3s]
+   (let [have (filter catalog iso3s)
+         missing (remove catalog iso3s)]
+     {:requested (count iso3s)
+      :covered (count have)
+      :covered-jurisdictions (vec (sort have))
+      :missing-jurisdictions (vec (sort missing))
+      :note (str "cloud-itonami-iso3166-civ statute.facts Wave 0 (ADR-2607141700): "
+                 (count (get catalog "CIV")) " CIV statutes seeded with an "
+                 "official citation (OHADA AUSCGIE, Code du Travail 2015, "
+                 "personal-data-protection law 2013, investment code 2018). "
+                 "A Direction Générale des Impôts (DGI) institutional-"
+                 "organization decree could not be independently confirmed "
+                 "this iteration (dgi.gouv.ci's own front page carries no "
+                 "citable text) -- an honest gap, not an omission by design. "
+                 "Extend `statute.facts/catalog`, never fabricate a law-id "
+                 "or URL.")})))
+
+(defn by-topic
+  "Statutes for `iso3` tagged with `topic` (e.g. :labor, :investment)."
+  [iso3 topic]
+  (filterv #(contains? (:statute/topic %) topic) (spec-basis iso3)))
