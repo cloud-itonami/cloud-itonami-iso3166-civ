@@ -7,7 +7,7 @@
   compliance. Mirrors cloud-itonami-iso3166-tgo/-cmr/-ben's
   `statute.facts` (ADR-2607141700, cloud-itonami-compliance-fact-
   federation) -- this iteration read all three siblings' full
-  `src/statute/facts.cljc` before writing this one.
+  `src/statute/facts.cljk` before writing this one.
 
   Every entry below cites an OFFICIAL government-hosted (Assemblée
   Nationale de Côte d'Ivoire, ARTCI), official-supranational-body-hosted
